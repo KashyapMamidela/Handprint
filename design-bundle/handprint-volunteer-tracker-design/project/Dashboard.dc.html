@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body{margin:0;background:#0d0f10;color:#f5f1e8;font-family:'Manrope',sans-serif;-webkit-font-smoothing:antialiased}
+    a{text-decoration:none}
+    select,textarea,input{font-family:'Manrope',sans-serif}
+    textarea::placeholder,input::placeholder{color:#5c5952}
+  </style>
+</helmet>
+
+<div style="background:#0d0f10;min-height:100vh">
+
+  <header style="height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 48px;border-bottom:1px solid rgba(255,255,255,0.08);position:sticky;top:0;background:rgba(13,15,16,0.85);backdrop-filter:blur(16px);z-index:50">
+    <a href="Landing.dc.html" style="display:flex;align-items:center;gap:10px">
+      <div style="width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,#e8c766,#d4af37);box-shadow:0 4px 12px -4px rgba(212,175,55,0.5)"></div>
+      <span style="font-family:'Fraunces',serif;font-size:20px;font-weight:600;color:#f5f1e8">Handprint</span>
+    </a>
+    <nav style="display:flex;gap:32px;align-items:center">
+      <a href="Dashboard.dc.html" style="color:#e8c766;font-size:15px;font-weight:700">Dashboard</a>
+      <a href="Drives.dc.html" style="color:#9c9791;font-size:15px;font-weight:600">Drives</a>
+      <a href="Leaderboard.dc.html" style="color:#9c9791;font-size:15px;font-weight:600">Leaderboard</a>
+      <a href="AdminQueue.dc.html" style="color:#9c9791;font-size:15px;font-weight:600">Admin</a>
+    </nav>
+    <div style="width:40px;height:40px;border-radius:50%;background:#d4af37;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#14120a">SR</div>
+  </header>
+
+  <div style="max-width:1200px;margin:0 auto;padding:48px 48px 96px">
+    <h1 style="font-family:'Fraunces',serif;font-size:32px;font-weight:600;margin:0 0 8px">Welcome back, Sofia</h1>
+    <p style="font-size:15px;color:#9c9791;margin:0 0 40px">Here's where your impact stands this term.</p>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:48px;perspective:1200px">
+      <div ref="{{ cardRefs.0 }}" style="background:rgba(255,255,255,0.045);border:1px solid rgba(255,255,255,0.09);border-radius:14px;padding:28px;box-shadow:0 20px 40px -24px rgba(0,0,0,0.6);transition:transform 0.12s ease-out">
+        <div style="font-size:13px;font-weight:700;color:#6b6862;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:12px">Total hours</div>
+        <div style="font-family:'Fraunces',serif;font-size:44px;font-weight:600;color:#f5f1e8">104</div>
+        <div style="font-size:13px;color:#59c2a4;margin-top:8px;font-weight:600">↑ 12 this month</div>
+      </div>
+      <div ref="{{ cardRefs.1 }}" style="background:rgba(255,255,255,0.045);border:1px solid rgba(255,255,255,0.09);border-radius:14px;padding:28px;box-shadow:0 20px 40px -24px rgba(0,0,0,0.6);transition:transform 0.12s ease-out">
+        <div style="font-size:13px;font-weight:700;color:#6b6862;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:12px">Verified vs pending</div>
+        <div style="display:flex;align-items:baseline;gap:10px">
+          <span style="font-family:'Fraunces',serif;font-size:44px;font-weight:600;color:#59c2a4">96</span>
+          <span style="font-size:16px;color:#6b6862">/ 8 pending</span>
+        </div>
+        <div style="display:flex;gap:4px;margin-top:14px;height:6px;border-radius:4px;overflow:hidden">
+          <div style="flex:12;background:#3fa588"></div>
+          <div style="flex:1;background:#d4af37"></div>
+        </div>
+      </div>
+      <div ref="{{ cardRefs.2 }}" style="background:rgba(255,255,255,0.045);border:1px solid rgba(255,255,255,0.09);border-radius:14px;padding:28px;box-shadow:0 20px 40px -24px rgba(0,0,0,0.6);transition:transform 0.12s ease-out">
+        <div style="font-size:13px;font-weight:700;color:#6b6862;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:12px">Campus rank</div>
+        <div style="font-family:'Fraunces',serif;font-size:44px;font-weight:600;color:#e8c766">#3</div>
+        <div style="font-size:13px;color:#6b6862;margin-top:8px">of 312 students</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1.4fr;gap:24px;align-items:start">
+
+      <div style="background:rgba(255,255,255,0.045);border:1px solid rgba(255,255,255,0.09);border-radius:14px;padding:28px">
+        <h2 style="font-family:'Fraunces',serif;font-size:20px;font-weight:600;margin:0 0 20px">Log hours</h2>
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div>
+            <label style="font-size:13px;font-weight:600;color:#a8a29b;display:block;margin-bottom:6px">Drive</label>
+            <select style="width:100%;height:44px;border-radius:10px;border:1px solid rgba(255,255,255,0.14);background:rgba(255,255,255,0.03);color:#f5f1e8;font-size:14px;padding:0 12px;box-sizing:border-box">
+              <option>Community Garden Build — Sprout Collective</option>
+              <option>Campus Blood Drive — Red Cross Student Chapter</option>
+              <option>Weekend Literacy Tutoring — Bright Futures</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:13px;font-weight:600;color:#a8a29b;display:block;margin-bottom:6px">Hours</label>
+            <input type="number" placeholder="e.g. 3" style="width:100%;height:44px;border-radius:10px;border:1px solid rgba(255,255,255,0.14);background:rgba(255,255,255,0.03);color:#f5f1e8;font-size:14px;padding:0 12px;box-sizing:border-box"/>
+          </div>
+          <div>
+            <label style="font-size:13px;font-weight:600;color:#a8a29b;display:block;margin-bottom:6px">What did you do?</label>
+            <textarea placeholder="Briefly describe your contribution…" rows="3" style="width:100%;border-radius:10px;border:1px solid rgba(255,255,255,0.14);background:rgba(255,255,255,0.03);color:#f5f1e8;font-size:14px;padding:12px;box-sizing:border-box;resize:none"></textarea>
+          </div>
+          <div>
+            <label style="font-size:13px;font-weight:600;color:#a8a29b;display:block;margin-bottom:6px">Proof (optional)</label>
+            <div style="border:1.5px dashed rgba(255,255,255,0.18);border-radius:10px;padding:24px;text-align:center;color:#6b6862;font-size:13px">Drag a photo or PDF here, or click to browse</div>
+          </div>
+          <button style="height:48px;border-radius:10px;background:linear-gradient(135deg,#e8c766,#d4af37);color:#14120a;font-size:15px;font-weight:700;border:none;box-shadow:0 12px 24px -8px rgba(212,175,55,0.45);cursor:pointer;margin-top:4px">Submit for verification</button>
+        </div>
+      </div>
+
+      <div style="background:rgba(255,255,255,0.045);border:1px solid rgba(255,255,255,0.09);border-radius:14px;padding:28px">
+        <h2 style="font-family:'Fraunces',serif;font-size:20px;font-weight:600;margin:0 0 20px">My submissions</h2>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <sc-for list="{{ submissions }}" as="s" hint-placeholder-count="5">
+            <div style="border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 18px;display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <div>
+                  <div style="font-size:14px;font-weight:700;color:#f5f1e8">{{ s.drive }}</div>
+                  <div style="font-size:12px;color:#6b6862;margin-top:2px">{{ s.org }} · {{ s.date }} · {{ s.hours }} hrs</div>
+                </div>
+                <span style="font-size:12px;font-weight:700;padding:6px 12px;border-radius:999px;text-transform:capitalize;background:{{ s.badgeBg }};color:{{ s.badgeColor }};box-shadow:{{ s.badgeShadow }}">{{ s.status }}</span>
+              </div>
+              <sc-if value="{{ s.reason }}">
+                <div style="font-size:12px;color:#b3564a;background:rgba(179,86,74,0.1);border-radius:8px;padding:8px 10px">{{ s.reason }}</div>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const BADGE = {
+  approved: { bg: 'rgba(63,165,136,0.16)', color: '#59c2a4', shadow: '0 0 16px -4px rgba(63,165,136,0.5)' },
+  pending: { bg: 'rgba(212,175,55,0.16)', color: '#e8c766', shadow: 'none' },
+  rejected: { bg: 'rgba(179,86,74,0.14)', color: '#c9857b', shadow: 'none' }
+};
+
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.cardRefs = [React.createRef(), React.createRef(), React.createRef()];
+    this.state = { submissions: null };
+  }
+  async componentDidMount() {
+    this._cleanups = this.cardRefs.map((ref) => {
+      const el = ref.current;
+      if (!el) return null;
+      const onMove = (e) => {
+        const r = el.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width - 0.5;
+        const py = (e.clientY - r.top) / r.height - 0.5;
+        el.style.transform = `perspective(800px) rotateX(${(-py * 8).toFixed(2)}deg) rotateY(${(px * 8).toFixed(2)}deg) translateZ(4px)`;
+      };
+      const onLeave = () => { el.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg)'; };
+      el.addEventListener('mousemove', onMove);
+      el.addEventListener('mouseleave', onLeave);
+      return () => { el.removeEventListener('mousemove', onMove); el.removeEventListener('mouseleave', onLeave); };
+    });
+    const mod = await import('./data.js');
+    this.setState({
+      submissions: mod.submissions.map((s) => ({ ...s, badgeBg: BADGE[s.status].bg, badgeColor: BADGE[s.status].color, badgeShadow: BADGE[s.status].shadow }))
+    });
+  }
+  componentWillUnmount() {
+    (this._cleanups || []).forEach((fn) => fn && fn());
+  }
+  renderVals() {
+    return { cardRefs: this.cardRefs, submissions: this.state.submissions || [] };
+  }
+}
+
+</script>
+</body>
+</html>

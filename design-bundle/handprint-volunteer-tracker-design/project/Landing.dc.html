@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body{margin:0;background:#0d0f10;color:#f5f1e8;font-family:'Manrope',sans-serif;-webkit-font-smoothing:antialiased}
+    a{text-decoration:none}
+    ::selection{background:rgba(212,175,55,0.3)}
+  </style>
+</helmet>
+
+<div style="background:#0d0f10;min-height:100vh">
+
+  <header style="height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 48px;border-bottom:1px solid rgba(255,255,255,0.08);position:sticky;top:0;background:rgba(13,15,16,0.85);backdrop-filter:blur(16px);z-index:50">
+    <div style="display:flex;align-items:center;gap:10px">
+      <div style="width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,#e8c766,#d4af37);box-shadow:0 4px 12px -4px rgba(212,175,55,0.5)"></div>
+      <span style="font-family:'Fraunces',serif;font-size:20px;font-weight:600;color:#f5f1e8;letter-spacing:-0.01em">Handprint</span>
+    </div>
+    <nav style="display:flex;gap:32px;align-items:center">
+      <a href="Dashboard.dc.html" style="color:#9c9791;font-size:15px;font-weight:600">Dashboard</a>
+      <a href="Drives.dc.html" style="color:#9c9791;font-size:15px;font-weight:600">Drives</a>
+      <a href="Leaderboard.dc.html" style="color:#9c9791;font-size:15px;font-weight:600">Leaderboard</a>
+      <a href="AdminQueue.dc.html" style="color:#9c9791;font-size:15px;font-weight:600">Admin</a>
+    </nav>
+    <a href="Login.dc.html" style="display:flex;align-items:center;gap:10px;color:#f5f1e8;font-size:14px;font-weight:700;height:40px;padding:0 18px;border-radius:10px;border:1px solid rgba(255,255,255,0.14)">Sign in</a>
+  </header>
+
+  <section ref="{{ heroRef }}" style="max-width:1200px;margin:0 auto;padding:96px 48px 64px;display:grid;grid-template-columns:repeat(12,1fr);gap:24px;align-items:center">
+    <div style="grid-column:1 / 7">
+      <div style="display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:999px;background:rgba(212,175,55,0.12);border:1px solid rgba(212,175,55,0.25);margin-bottom:24px">
+        <span style="width:6px;height:6px;border-radius:50%;background:#d4af37"></span>
+        <span style="font-size:13px;font-weight:700;letter-spacing:0.06em;color:#e8c766;text-transform:uppercase">Volunteer hours, verified</span>
+      </div>
+      <h1 style="font-family:'Fraunces',serif;font-size:68px;line-height:1.04;font-weight:600;letter-spacing:-0.01em;margin:0 0 24px;color:#f5f1e8">Leave your<br>mark.</h1>
+      <p style="font-size:19px;line-height:1.6;color:#a8a29b;max-width:460px;margin:0 0 40px">Log your service hours, get them verified by real organizers, and see your impact climb the campus leaderboard — all in one calm, honest place.</p>
+      <div style="display:flex;gap:16px;margin-bottom:40px">
+        <a href="Login.dc.html" style="display:flex;align-items:center;justify-content:center;height:48px;padding:0 28px;border-radius:10px;background:linear-gradient(135deg,#e8c766,#d4af37);color:#14120a;font-size:15px;font-weight:700;box-shadow:0 12px 24px -8px rgba(212,175,55,0.45)">Start Logging Hours</a>
+        <a href="Drives.dc.html" style="display:flex;align-items:center;justify-content:center;height:48px;padding:0 28px;border-radius:10px;border:1px solid rgba(255,255,255,0.16);color:#f5f1e8;font-size:15px;font-weight:700">Browse Drives</a>
+      </div>
+      <div style="display:flex;gap:40px">
+        <div><div style="font-family:'Fraunces',serif;font-size:26px;font-weight:600;color:#f5f1e8">2,438</div><div style="font-size:13px;color:#6b6862;margin-top:2px">verified hours this term</div></div>
+        <div><div style="font-family:'Fraunces',serif;font-size:26px;font-weight:600;color:#f5f1e8">312</div><div style="font-size:13px;color:#6b6862;margin-top:2px">students participating</div></div>
+        <div><div style="font-family:'Fraunces',serif;font-size:26px;font-weight:600;color:#f5f1e8">46</div><div style="font-size:13px;color:#6b6862;margin-top:2px">active drives</div></div>
+      </div>
+    </div>
+
+    <div style="grid-column:8 / 13;display:flex;justify-content:center;perspective:1000px">
+      <div ref="{{ markRef }}" style="width:340px;height:340px;position:relative;transform-style:preserve-3d;transition:transform 0.15s ease-out">
+        <div style="position:absolute;left:50%;top:56%;width:180px;height:200px;transform:translate(-50%,-50%) translateZ(10px);border-radius:70px 70px 60px 60px;background:linear-gradient(155deg,#f3d98a,#d4af37 55%,#a8802a);box-shadow:0 30px 60px -20px rgba(212,175,55,0.4), inset 0 2px 4px rgba(255,255,255,0.5)"></div>
+        <div style="position:absolute;left:26%;top:16%;width:40px;height:110px;transform:translateZ(26px) rotate(-6deg);border-radius:20px;background:linear-gradient(155deg,#f6e0a0,#d4af37);box-shadow:inset 0 2px 3px rgba(255,255,255,0.55),0 10px 18px -8px rgba(0,0,0,0.4)"></div>
+        <div style="position:absolute;left:40%;top:6%;width:40px;height:130px;transform:translateZ(30px) rotate(-2deg);border-radius:20px;background:linear-gradient(155deg,#f6e0a0,#d4af37);box-shadow:inset 0 2px 3px rgba(255,255,255,0.55),0 10px 18px -8px rgba(0,0,0,0.4)"></div>
+        <div style="position:absolute;left:54%;top:5%;width:40px;height:132px;transform:translateZ(30px) rotate(2deg);border-radius:20px;background:linear-gradient(155deg,#f6e0a0,#d4af37);box-shadow:inset 0 2px 3px rgba(255,255,255,0.55),0 10px 18px -8px rgba(0,0,0,0.4)"></div>
+        <div style="position:absolute;left:68%;top:14%;width:38px;height:108px;transform:translateZ(24px) rotate(7deg);border-radius:19px;background:linear-gradient(155deg,#f6e0a0,#d4af37);box-shadow:inset 0 2px 3px rgba(255,255,255,0.55),0 10px 18px -8px rgba(0,0,0,0.4)"></div>
+        <div style="position:absolute;left:6%;top:46%;width:34px;height:78px;transform:translateZ(14px) rotate(-32deg);border-radius:17px;background:linear-gradient(155deg,#f6e0a0,#d4af37);box-shadow:inset 0 2px 3px rgba(255,255,255,0.55),0 8px 14px -6px rgba(0,0,0,0.4)"></div>
+        <div style="position:absolute;left:50%;top:60%;width:120px;height:80px;transform:translate(-50%,-50%) translateZ(34px);border-radius:60px;background:radial-gradient(circle at 35% 30%,rgba(255,255,255,0.55),transparent 60%)"></div>
+      </div>
+    </div>
+  </section>
+
+  <section style="max-width:1200px;margin:0 auto;padding:48px 48px 96px">
+    <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:24px">
+      <h2 style="font-family:'Fraunces',serif;font-size:26px;font-weight:600;color:#f5f1e8;margin:0">This month's top contributors</h2>
+      <a href="Leaderboard.dc.html" style="font-size:14px;font-weight:700;color:#e8c766">View full leaderboard →</a>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px">
+      <sc-for list="{{ leaders }}" as="l" hint-placeholder-count="3">
+        <div style="background:rgba(255,255,255,0.045);border:1px solid rgba(255,255,255,0.09);border-radius:14px;padding:20px;display:flex;align-items:center;gap:16px">
+          <div style="width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;background:{{ l.rankBg }};color:{{ l.rankColor }}">{{ l.initials }}</div>
+          <div style="flex:1">
+            <div style="font-size:15px;font-weight:700;color:#f5f1e8">{{ l.name }}</div>
+            <div style="font-size:13px;color:#6b6862;margin-top:2px">{{ l.hours }} hrs · rank #{{ l.rank }}</div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section style="background:#101315;padding:96px 0">
+    <div style="max-width:1200px;margin:0 auto;padding:0 48px">
+      <h2 style="font-family:'Fraunces',serif;font-size:30px;font-weight:600;color:#f5f1e8;margin:0 0 48px;text-align:center">How it works</h2>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px">
+        <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:32px">
+          <div style="width:40px;height:40px;border-radius:10px;background:rgba(212,175,55,0.15);color:#e8c766;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:700;font-size:17px;margin-bottom:20px">1</div>
+          <h3 style="font-size:18px;font-weight:700;color:#f5f1e8;margin:0 0 8px">Log</h3>
+          <p style="font-size:15px;line-height:1.6;color:#a8a29b;margin:0">Pick a drive, enter your hours, and add a quick description of what you did.</p>
+        </div>
+        <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:32px">
+          <div style="width:40px;height:40px;border-radius:10px;background:rgba(63,165,136,0.15);color:#59c2a4;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:700;font-size:17px;margin-bottom:20px">2</div>
+          <h3 style="font-size:18px;font-weight:700;color:#f5f1e8;margin:0 0 8px">Verify</h3>
+          <p style="font-size:15px;line-height:1.6;color:#a8a29b;margin:0">The organizer who ran the drive reviews and confirms your submission.</p>
+        </div>
+        <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:32px">
+          <div style="width:40px;height:40px;border-radius:10px;background:rgba(212,175,55,0.15);color:#e8c766;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:700;font-size:17px;margin-bottom:20px">3</div>
+          <h3 style="font-size:18px;font-weight:700;color:#f5f1e8;margin:0 0 8px">Rank</h3>
+          <p style="font-size:15px;line-height:1.6;color:#a8a29b;margin:0">Verified hours count toward your total and your place on the leaderboard.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="max-width:1200px;margin:0 auto;padding:96px 48px">
+    <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:24px">
+      <h2 style="font-family:'Fraunces',serif;font-size:26px;font-weight:600;color:#f5f1e8;margin:0">Open drives near you</h2>
+      <a href="Drives.dc.html" style="font-size:14px;font-weight:700;color:#e8c766">Browse all drives →</a>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px">
+      <sc-for list="{{ drivesPreview }}" as="d" hint-placeholder-count="3">
+        <div style="background:rgba(255,255,255,0.045);border:1px solid rgba(255,255,255,0.09);border-radius:14px;padding:24px;display:flex;flex-direction:column;gap:12px">
+          <div style="font-size:12px;font-weight:700;letter-spacing:0.04em;color:#6b6862;text-transform:uppercase">{{ d.org }}</div>
+          <h3 style="font-size:17px;font-weight:700;color:#f5f1e8;margin:0">{{ d.name }}</h3>
+          <p style="font-size:14px;line-height:1.6;color:#a8a29b;margin:0;flex:1">{{ d.desc }}</p>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding-top:12px;border-top:1px solid rgba(255,255,255,0.08)">
+            <span style="font-size:13px;color:#6b6862">{{ d.date }}</span>
+            <a href="Drives.dc.html" style="font-size:13px;font-weight:700;color:#e8c766">Log Hours →</a>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <footer style="border-top:1px solid rgba(255,255,255,0.08);padding:48px">
+    <div style="max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:24px;height:24px;border-radius:7px;background:linear-gradient(135deg,#e8c766,#d4af37)"></div>
+        <span style="font-family:'Fraunces',serif;font-size:16px;font-weight:600;color:#f5f1e8">Handprint</span>
+      </div>
+      <span style="font-size:13px;color:#6b6862">© 2026 Handprint. Leave your mark.</span>
+    </div>
+  </footer>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const RANK_STYLES = [
+  { bg: 'rgba(212,175,55,0.18)', color: '#e8c766' },
+  { bg: 'rgba(200,200,200,0.16)', color: '#d8d5cf' },
+  { bg: 'rgba(180,120,70,0.18)', color: '#c98f5c' }
+];
+
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.markRef = React.createRef();
+    this.heroRef = React.createRef();
+    this.state = { leaders: null, drivesPreview: null };
+  }
+  async componentDidMount() {
+    const hero = this.heroRef.current, mark = this.markRef.current;
+    if (hero && mark) {
+      this._onMove = (e) => {
+        const r = hero.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width - 0.5;
+        const py = (e.clientY - r.top) / r.height - 0.5;
+        mark.style.transform = `rotateX(${(-py * 10).toFixed(2)}deg) rotateY(${(px * 14).toFixed(2)}deg)`;
+      };
+      hero.addEventListener('mousemove', this._onMove);
+    }
+    const mod = await import('./data.js');
+    this.setState({
+      leaders: mod.leaderboard.slice(0, 3).map((l, i) => ({ ...l, initials: l.initials, rankBg: RANK_STYLES[i].bg, rankColor: RANK_STYLES[i].color })),
+      drivesPreview: mod.drives.slice(0, 3)
+    });
+  }
+  componentWillUnmount() {
+    if (this.heroRef.current && this._onMove) this.heroRef.current.removeEventListener('mousemove', this._onMove);
+  }
+  renderVals() {
+    return {
+      markRef: this.markRef,
+      heroRef: this.heroRef,
+      leaders: this.state.leaders || [],
+      drivesPreview: this.state.drivesPreview || []
+    };
+  }
+}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body{margin:0;background:#0d0f10;color:#f5f1e8;font-family:'Manrope',sans-serif;-webkit-font-smoothing:antialiased}
+    a{text-decoration:none}
+    select{font-family:'Manrope',sans-serif}
+    @keyframes podiumRise{
+      from{transform:rotateX(24deg) rotateY(-18deg) translateY(50px) scale(0.9);opacity:0}
+      to{transform:rotateX(10deg) rotateY(-10deg) translateY(0) scale(1);opacity:1}
+    }
+    .podium-plinth{animation:podiumRise 0.9s cubic-bezier(0.16,1,0.3,1) both}
+  </style>
+</helmet>
+
+<div style="background:#0d0f10;min-height:100vh">
+
+  <header style="height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 48px;border-bottom:1px solid rgba(255,255,255,0.08);position:sticky;top:0;background:rgba(13,15,16,0.85);backdrop-filter:blur(16px);z-index:50">
+    <a href="Landing.dc.html" style="display:flex;align-items:center;gap:10px">
+      <div style="width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,#e8c766,#d4af37);box-shadow:0 4px 12px -4px rgba(212,175,55,0.5)"></div>
+      <span style="font-family:'Fraunces',serif;font-size:20px;font-weight:600;color:#f5f1e8">Handprint</span>
+    </a>
+    <nav style="display:flex;gap:32px;align-items:center">
+      <a href="Dashboard.dc.html" style="color:#9c9791;font-size:15px;font-weight:600">Dashboard</a>
+      <a href="Drives.dc.html" style="color:#9c9791;font-size:15px;font-weight:600">Drives</a>
+      <a href="Leaderboard.dc.html" style="color:#e8c766;font-size:15px;font-weight:700">Leaderboard</a>
+      <a href="AdminQueue.dc.html" style="color:#9c9791;font-size:15px;font-weight:600">Admin</a>
+    </nav>
+    <div style="width:40px;height:40px;border-radius:50%;background:#d4af37;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#14120a">SR</div>
+  </header>
+
+  <div style="max-width:1200px;margin:0 auto;padding:48px 48px 96px">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:48px">
+      <div>
+        <h1 style="font-family:'Fraunces',serif;font-size:32px;font-weight:600;margin:0 0 8px">Leaderboard</h1>
+        <p style="font-size:15px;color:#9c9791;margin:0">Top contributors, ranked by verified hours.</p>
+      </div>
+      <div style="display:flex;gap:12px">
+        <select style="height:44px;border-radius:10px;border:1px solid rgba(255,255,255,0.14);background:rgba(255,255,255,0.04);color:#f5f1e8;font-size:14px;padding:0 12px">
+          <option>All drives</option>
+          <option>Community Garden Build</option>
+          <option>Campus Blood Drive</option>
+        </select>
+        <select style="height:44px;border-radius:10px;border:1px solid rgba(255,255,255,0.14);background:rgba(255,255,255,0.04);color:#f5f1e8;font-size:14px;padding:0 12px">
+          <option>This term</option>
+          <option>This month</option>
+          <option>All time</option>
+        </select>
+      </div>
+    </div>
+
+    <div style="display:flex;justify-content:center;perspective:1400px;margin-bottom:64px;padding:32px 0 0">
+      <div style="display:flex;align-items:flex-end;gap:32px">
+
+        <div class="podium-plinth" style="animation-delay:0.05s;display:flex;flex-direction:column;align-items:center;gap:14px">
+          <div style="width:56px;height:56px;border-radius:50%;background:rgba(63,165,136,0.18);border:2px solid #3fa588;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;color:#59c2a4">{{ podium.1.initials }}</div>
+          <div style="text-align:center">
+            <div style="font-size:15px;font-weight:700;color:#f5f1e8">{{ podium.1.name }}</div>
+            <div style="font-size:13px;color:#6b6862;margin-top:2px">{{ podium.1.hours }} hrs</div>
+          </div>
+          <div style="width:150px;height:110px;border-radius:14px 14px 0 0;background:linear-gradient(160deg,#59c2a4,#2f7f68 70%);box-shadow:0 -2px 0 rgba(255,255,255,0.25) inset,0 24px 40px -16px rgba(47,127,104,0.5);display:flex;align-items:center;justify-content:center">
+            <span style="font-family:'Fraunces',serif;font-size:36px;font-weight:700;color:rgba(13,15,16,0.5)">2</span>
+          </div>
+        </div>
+
+        <div class="podium-plinth" style="animation-delay:0.2s;display:flex;flex-direction:column;align-items:center;gap:14px">
+          <div style="width:68px;height:68px;border-radius:50%;background:rgba(212,175,55,0.18);border:2px solid #d4af37;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:19px;color:#e8c766;box-shadow:0 0 24px -4px rgba(212,175,55,0.5)">{{ podium.0.initials }}</div>
+          <div style="text-align:center">
+            <div style="font-size:16px;font-weight:700;color:#f5f1e8">{{ podium.0.name }}</div>
+            <div style="font-size:13px;color:#e8c766;margin-top:2px;font-weight:700">{{ podium.0.hours }} hrs</div>
+          </div>
+          <div style="width:170px;height:150px;border-radius:14px 14px 0 0;background:linear-gradient(160deg,#f3d98a,#d4af37 55%,#a8802a);box-shadow:0 -2px 0 rgba(255,255,255,0.4) inset,0 30px 50px -16px rgba(212,175,55,0.5);display:flex;align-items:center;justify-content:center">
+            <span style="font-family:'Fraunces',serif;font-size:44px;font-weight:700;color:rgba(20,18,10,0.55)">1</span>
+          </div>
+        </div>
+
+        <div class="podium-plinth" style="animation-delay:0.35s;display:flex;flex-direction:column;align-items:center;gap:14px">
+          <div style="width:52px;height:52px;border-radius:50%;background:rgba(201,143,92,0.18);border:2px solid #c98f5c;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;color:#d6a679">{{ podium.2.initials }}</div>
+          <div style="text-align:center">
+            <div style="font-size:15px;font-weight:700;color:#f5f1e8">{{ podium.2.name }}</div>
+            <div style="font-size:13px;color:#6b6862;margin-top:2px">{{ podium.2.hours }} hrs</div>
+          </div>
+          <div style="width:150px;height:84px;border-radius:14px 14px 0 0;background:linear-gradient(160deg,#d6a679,#8a5a35 70%);box-shadow:0 -2px 0 rgba(255,255,255,0.2) inset,0 24px 40px -16px rgba(138,90,53,0.5);display:flex;align-items:center;justify-content:center">
+            <span style="font-family:'Fraunces',serif;font-size:32px;font-weight:700;color:rgba(20,15,10,0.45)">3</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div style="border:1px solid rgba(255,255,255,0.09);border-radius:14px;overflow:hidden">
+      <div style="display:grid;grid-template-columns:0.5fr 2fr 1fr 3fr;padding:14px 24px;background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.08)">
+        <div style="font-size:12px;font-weight:700;color:#6b6862;text-transform:uppercase;letter-spacing:0.04em">Rank</div>
+        <div style="font-size:12px;font-weight:700;color:#6b6862;text-transform:uppercase;letter-spacing:0.04em">Student</div>
+        <div style="font-size:12px;font-weight:700;color:#6b6862;text-transform:uppercase;letter-spacing:0.04em">Hours</div>
+        <div style="font-size:12px;font-weight:700;color:#6b6862;text-transform:uppercase;letter-spacing:0.04em">Verified hours</div>
+      </div>
+      <sc-for list="{{ rest }}" as="r" hint-placeholder-count="5">
+        <div style="display:grid;grid-template-columns:0.5fr 2fr 1fr 3fr;padding:14px 24px;align-items:center;border-bottom:1px solid rgba(255,255,255,0.06)">
+          <div style="font-size:14px;font-weight:700;color:#6b6862">#{{ r.rank }}</div>
+          <div style="display:flex;align-items:center;gap:12px">
+            <div style="width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#a8a29b">{{ r.initials }}</div>
+            <div style="font-size:14px;font-weight:700;color:#f5f1e8">{{ r.name }}</div>
+          </div>
+          <div style="font-size:14px;font-weight:700;color:#f5f1e8">{{ r.hours }}</div>
+          <div style="height:10px;border-radius:6px;background:rgba(255,255,255,0.06);overflow:hidden">
+            <div style="height:100%;width:{{ r.barWidth }}%;border-radius:6px;background:linear-gradient(90deg,#d4af37,#3fa588)"></div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { data: null };
+  async componentDidMount() {
+    const mod = await import('./data.js');
+    this.setState({ data: mod.leaderboard });
+  }
+  renderVals() {
+    const data = this.state.data || [];
+    const top3 = data.slice(0, 3);
+    const rest = data.slice(3);
+    const max = data.length ? data[0].hours : 1;
+    return {
+      podium: top3,
+      rest: rest.map((r) => ({ ...r, barWidth: Math.round((r.hours / max) * 100) }))
+    };
+  }
+}
+
+</script>
+</body>
+</html>

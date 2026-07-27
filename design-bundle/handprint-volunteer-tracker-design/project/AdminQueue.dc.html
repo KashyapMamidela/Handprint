@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body{margin:0;background:#0d0f10;color:#f5f1e8;font-family:'Manrope',sans-serif;-webkit-font-smoothing:antialiased}
+    a{text-decoration:none}
+    select{font-family:'Manrope',sans-serif}
+  </style>
+</helmet>
+
+<div style="background:#0d0f10;min-height:100vh">
+
+  <header style="height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 48px;border-bottom:1px solid rgba(255,255,255,0.08);position:sticky;top:0;background:rgba(13,15,16,0.85);backdrop-filter:blur(16px);z-index:50">
+    <a href="Landing.dc.html" style="display:flex;align-items:center;gap:10px">
+      <div style="width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,#e8c766,#d4af37);box-shadow:0 4px 12px -4px rgba(212,175,55,0.5)"></div>
+      <span style="font-family:'Fraunces',serif;font-size:20px;font-weight:600;color:#f5f1e8">Handprint</span>
+    </a>
+    <nav style="display:flex;gap:32px;align-items:center">
+      <a href="Dashboard.dc.html" style="color:#9c9791;font-size:15px;font-weight:600">Dashboard</a>
+      <a href="Drives.dc.html" style="color:#9c9791;font-size:15px;font-weight:600">Drives</a>
+      <a href="Leaderboard.dc.html" style="color:#9c9791;font-size:15px;font-weight:600">Leaderboard</a>
+      <a href="AdminQueue.dc.html" style="color:#e8c766;font-size:15px;font-weight:700">Admin</a>
+    </nav>
+    <div style="width:40px;height:40px;border-radius:50%;background:#3fa588;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#0d0f10">RC</div>
+  </header>
+
+  <div style="max-width:1200px;margin:0 auto;padding:48px 48px 96px">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:32px">
+      <div>
+        <h1 style="font-family:'Fraunces',serif;font-size:32px;font-weight:600;margin:0 0 8px">Verification queue</h1>
+        <p style="font-size:15px;color:#9c9791;margin:0">{{ pendingCount }} submissions waiting on your review.</p>
+      </div>
+      <div style="display:flex;gap:12px">
+        <select style="height:44px;border-radius:10px;border:1px solid rgba(255,255,255,0.14);background:rgba(255,255,255,0.04);color:#f5f1e8;font-size:14px;padding:0 12px">
+          <option>All drives</option>
+          <option>Community Garden Build</option>
+          <option>Senior Center Tech Help</option>
+          <option>Campus Blood Drive</option>
+        </select>
+        <select style="height:44px;border-radius:10px;border:1px solid rgba(255,255,255,0.14);background:rgba(255,255,255,0.04);color:#f5f1e8;font-size:14px;padding:0 12px">
+          <option>Newest first</option>
+          <option>Oldest first</option>
+          <option>Most hours</option>
+        </select>
+      </div>
+    </div>
+
+    <div style="border:1px solid rgba(255,255,255,0.09);border-radius:14px;overflow:hidden">
+      <div style="display:grid;grid-template-columns:1.4fr 1.6fr 0.7fr 0.9fr 1.4fr;padding:14px 24px;background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.08)">
+        <div style="font-size:12px;font-weight:700;color:#6b6862;text-transform:uppercase;letter-spacing:0.04em">Student</div>
+        <div style="font-size:12px;font-weight:700;color:#6b6862;text-transform:uppercase;letter-spacing:0.04em">Drive</div>
+        <div style="font-size:12px;font-weight:700;color:#6b6862;text-transform:uppercase;letter-spacing:0.04em">Hours</div>
+        <div style="font-size:12px;font-weight:700;color:#6b6862;text-transform:uppercase;letter-spacing:0.04em">Submitted</div>
+        <div style="font-size:12px;font-weight:700;color:#6b6862;text-transform:uppercase;letter-spacing:0.04em;text-align:right">Actions</div>
+      </div>
+
+      <sc-for list="{{ queue }}" as="q" hint-placeholder-count="6">
+        <div style="border-bottom:1px solid rgba(255,255,255,0.06)">
+          <div style="display:grid;grid-template-columns:1.4fr 1.6fr 0.7fr 0.9fr 1.4fr;padding:16px 24px;align-items:center">
+            <div style="font-size:14px;font-weight:700;color:#f5f1e8">{{ q.student }}</div>
+            <div>
+              <div style="font-size:14px;color:#f5f1e8">{{ q.drive }}</div>
+              <div style="font-size:12px;color:#6b6862;margin-top:2px">{{ q.org }}</div>
+            </div>
+            <div style="font-size:14px;color:#f5f1e8;font-weight:600">{{ q.hours }} hrs</div>
+            <div style="font-size:13px;color:#9c9791">{{ q.date }}</div>
+            <div style="display:flex;gap:8px;justify-content:flex-end">
+              <button onClick="{{ q.onApprove }}" style="height:36px;padding:0 16px;border-radius:8px;background:rgba(63,165,136,0.16);color:#59c2a4;border:1px solid rgba(63,165,136,0.3);font-size:13px;font-weight:700;cursor:pointer">Approve</button>
+              <button onClick="{{ q.onReject }}" style="height:36px;padding:0 16px;border-radius:8px;background:rgba(179,86,74,0.12);color:#c9857b;border:1px solid rgba(179,86,74,0.28);font-size:13px;font-weight:700;cursor:pointer">Reject</button>
+            </div>
+          </div>
+          <sc-if value="{{ q.rejecting }}">
+            <div style="padding:0 24px 16px;display:flex;gap:10px">
+              <input value="{{ q.reasonDraft }}" onChange="{{ q.onReasonChange }}" placeholder="Reason for rejection…" style="flex:1;height:38px;border-radius:8px;border:1px solid rgba(255,255,255,0.14);background:rgba(255,255,255,0.03);color:#f5f1e8;font-size:13px;padding:0 12px;box-sizing:border-box;font-family:'Manrope',sans-serif"/>
+              <button onClick="{{ q.onConfirmReject }}" style="height:38px;padding:0 16px;border-radius:8px;background:#b3564a;color:#f5f1e8;border:none;font-size:13px;font-weight:700;cursor:pointer">Confirm</button>
+            </div>
+          </sc-if>
+        </div>
+      </sc-for>
+
+      <sc-if value="{{ isEmpty }}">
+        <div style="padding:48px;text-align:center;color:#6b6862;font-size:14px">Queue is clear — nice work.</div>
+      </sc-if>
+    </div>
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { queue: null, rejectingId: null, drafts: {} };
+
+  async componentDidMount() {
+    const mod = await import('./data.js');
+    this.setState({ queue: mod.queue });
+  }
+
+  approve = (id) => this.setState((s) => ({ queue: s.queue.filter((q) => q.id !== id) }));
+  startReject = (id) => this.setState({ rejectingId: id });
+  changeDraft = (id, val) => this.setState((s) => ({ drafts: { ...s.drafts, [id]: val } }));
+  confirmReject = (id) => this.setState((s) => ({ queue: s.queue.filter((q) => q.id !== id), rejectingId: null }));
+
+  renderVals() {
+    const queue = (this.state.queue || []).map((q) => ({
+      ...q,
+      rejecting: this.state.rejectingId === q.id,
+      reasonDraft: this.state.drafts[q.id] || '',
+      onApprove: () => this.approve(q.id),
+      onReject: () => this.startReject(q.id),
+      onReasonChange: (e) => this.changeDraft(q.id, e.target.value),
+      onConfirmReject: () => this.confirmReject(q.id)
+    }));
+    return {
+      queue,
+      isEmpty: this.state.queue !== null && queue.length === 0,
+      pendingCount: queue.length
+    };
+  }
+}
+
+</script>
+</body>
+</html>
