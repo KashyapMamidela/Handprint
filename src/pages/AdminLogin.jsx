@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import PasswordInput from '../components/PasswordInput';
 import { useAuth } from '../context/AuthContext';
 
 export default function AdminLogin() {
@@ -57,13 +58,11 @@ export default function AdminLogin() {
             />
           </Field>
           <Field label="Password">
-            <input
-              type="password"
+            <PasswordInput
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
-              className="h-12 w-full rounded-[10px] border border-white/[0.14] bg-white/[0.03] px-3.5 font-sans text-sm text-cream box-border"
             />
           </Field>
 

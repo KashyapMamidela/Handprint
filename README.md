@@ -24,14 +24,6 @@ Run them with the [Supabase CLI](https://supabase.com/docs/guides/cli) (`supabas
 
 **Email confirmation**: Supabase projects default to requiring email confirmation on signup, and free-tier projects have a very low email-sending rate limit (a handful per hour) — easy to exhaust while testing signups. For a smoother demo, turn confirmation off under Authentication → Sign In / Providers → Email → "Confirm email". Login.jsx handles either setting (shows a "check your email" message if it's left on).
 
-**Google OAuth**: enabled as a "Continue with Google" option on `/login`, sitting alongside email/password. To turn it on:
-
-1. In [Google Cloud Console](https://console.cloud.google.com/apis/credentials), create an OAuth 2.0 Client ID (Web application). Authorized redirect URI: `https://<your-project-ref>.supabase.co/auth/v1/callback`.
-2. In Supabase: Authentication → Sign In / Providers → Google → paste the Client ID and Client Secret, enable it.
-3. Add your deployed URL (e.g. `https://your-app.vercel.app`) to Authentication → URL Configuration → Redirect URLs, so Supabase allows redirecting back there after sign-in.
-
-Until this is configured, the button will show an error when clicked — email/password still works independently either way.
-
 ## 3. Configure environment variables
 
 ```bash
@@ -64,7 +56,7 @@ Connect the GitHub repo in Vercel (Vercel auto-detects Vite — no `vercel.json`
 ## Notes on scope
 
 - **Roles** are just `volunteer` and `admin` — a single shared admin team that can post/edit any drive and verify any submission (no per-admin ownership of drives).
-- **Auth** is email/password plus Google OAuth via Supabase Auth (volunteers only — `/admin/login` stays email/password-only since admin accounts are manually promoted, not self-service).
+- **Auth** is email/password via Supabase Auth. Password fields have a show/hide toggle (`src/components/PasswordInput.jsx`).
 - **Realtime** is Supabase Realtime: Dashboard subscribes to its own `hour_logs` rows, AdminQueue and Leaderboard subscribe to all `hour_logs` changes, refetching on any insert/update.
 - **Proof uploads** go to the private `proof` Storage bucket at `{volunteer-id}/...`; RLS on `storage.objects` limits reads to the uploader or an admin.
 - **Leaderboard** is computed on read from approved `hour_logs` via the `leaderboard` view — no denormalized column.

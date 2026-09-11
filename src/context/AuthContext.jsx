@@ -77,15 +77,6 @@ export function AuthProvider({ children }) {
     [fetchProfile]
   );
 
-  // Redirects to Google; the page reloads on return with a session already
-  // set, so there's nothing to return here -- onAuthStateChange picks it up.
-  const loginWithGoogle = useCallback(() => {
-    return supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: { redirectTo: `${window.location.origin}/dashboard` },
-    });
-  }, []);
-
   const signOut = useCallback(() => supabase.auth.signOut(), []);
 
   const value = {
@@ -95,7 +86,6 @@ export function AuthProvider({ children }) {
     loading,
     login,
     signup,
-    loginWithGoogle,
     signOut,
     refreshProfile: () => fetchProfile(session?.user?.id),
   };
