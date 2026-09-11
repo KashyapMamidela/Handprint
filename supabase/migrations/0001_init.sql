@@ -58,7 +58,13 @@ declare
   computed_initials text;
   parts text[];
 begin
-  full_name := coalesce(nullif(trim(new.raw_user_meta_data ->> 'name'), ''), split_part(new.email, '@', 1));
+  -- 'name' comes from our own signup form; 'full_name' is what Google OAuth
+  -- populates instead.
+  full_name := coalesce(
+    nullif(trim(new.raw_user_meta_data ->> 'name'), ''),
+    nullif(trim(new.raw_user_meta_data ->> 'full_name'), ''),
+    split_part(new.email, '@', 1)
+  );
   parts := regexp_split_to_array(trim(full_name), '\s+');
   if array_length(parts, 1) >= 2 then
     computed_initials := upper(left(parts[1], 1) || left(parts[array_length(parts, 1)], 1));
