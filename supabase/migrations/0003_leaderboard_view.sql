@@ -13,7 +13,7 @@ select
   ) as rank
 from profiles p
 left join hour_logs hl on hl.student_id = p.id
-where p.role = 'student'
+where p.role = 'volunteer'
 group by p.id, p.name, p.initials
 order by hours desc, p.name asc;
 

@@ -42,7 +42,7 @@ export default function Dashboard() {
       .select('*, drives(name, org)')
       .eq('student_id', profile.id)
       .order('created_at', { ascending: false });
-    setSubmissions(data || []);
+    setSubmissions((data || []).map((s) => ({ ...s, drive_name: s.drives?.name, drive_org: s.drives?.org })));
   }, [profile]);
 
   const loadRank = useCallback(async () => {
@@ -111,12 +111,12 @@ export default function Dashboard() {
     setFormError(null);
     setSubmitting(true);
     try {
-      let proofUrl = null;
+      let proofPath = null;
       if (file) {
         const path = `${profile.id}/${Date.now()}_${file.name}`;
         const { error: uploadError } = await supabase.storage.from('proof').upload(path, file);
         if (uploadError) throw uploadError;
-        proofUrl = path;
+        proofPath = path;
       }
 
       const { error: insertError } = await supabase.from('hour_logs').insert({
@@ -124,7 +124,7 @@ export default function Dashboard() {
         drive_id: driveId,
         hours: Number(hours),
         description,
-        proof_url: proofUrl,
+        proof_path: proofPath,
       });
       if (insertError) throw insertError;
 
@@ -184,7 +184,7 @@ export default function Dashboard() {
             <div className="font-display text-[44px] font-semibold text-gold-200">
               {rankRow ? `#${rankRow.rank}` : '—'}
             </div>
-            <div className="mt-2 text-[13px] text-text-muted">of {studentCount} students</div>
+            <div className="mt-2 text-[13px] text-text-muted">of {studentCount} volunteers</div>
           </div>
         </div>
 
@@ -281,9 +281,9 @@ export default function Dashboard() {
                 <div key={s.id} className="flex flex-col gap-2 rounded-xl border border-white/[0.08] p-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className="text-sm font-bold text-cream">{s.drives?.name}</div>
+                      <div className="text-sm font-bold text-cream">{s.drive_name}</div>
                       <div className="mt-0.5 text-xs text-text-muted">
-                        {s.drives?.org} · {formatDate(s.created_at)} · {s.hours} hrs
+                        {s.drive_org} · {formatDate(s.created_at)} · {s.hours} hrs
                       </div>
                     </div>
                     <StatusBadge status={s.status} />

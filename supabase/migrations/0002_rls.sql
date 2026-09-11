@@ -27,19 +27,7 @@ as $$
   select role from public.profiles where id = auth.uid();
 $$;
 
-create function public.owns_drive(target_drive_id uuid)
-returns boolean
-language sql
-security definer
-stable
-set search_path = public
-as $$
-  select exists (
-    select 1 from public.drives where id = target_drive_id and organizer_id = auth.uid()
-  );
-$$;
-
--- Prevent a user from granting themselves organizer/admin via a client update.
+-- Prevent a user from granting themselves admin via a client update.
 create function public.prevent_role_self_escalation()
 returns trigger
 language plpgsql
@@ -72,28 +60,26 @@ create policy "users can update their own profile"
   with check (id = auth.uid() or is_admin());
 
 -- drives: publicly readable (Landing and Drives are browsable pre-login).
+-- Any admin can create/edit any drive -- a single shared admin team, not
+-- per-drive ownership, so there's no "owns this drive" check here.
 create policy "drives are publicly readable"
   on drives for select
   to anon, authenticated
   using (true);
 
-create policy "organizers and admins can create drives"
+create policy "admins can create drives"
   on drives for insert
   to authenticated
-  with check (
-    organizer_id = auth.uid()
-    and current_profile_role() in ('organizer', 'admin')
-  );
+  with check (is_admin());
 
-create policy "organizers manage their own drives, admins manage all"
+create policy "admins can edit any drive"
   on drives for update
   to authenticated
-  using (organizer_id = auth.uid() or is_admin())
-  with check (organizer_id = auth.uid() or is_admin());
+  using (is_admin())
+  with check (is_admin());
 
--- hour_logs: students insert/read their own; organizers read/update logs for
--- drives they organize; admins read/update everything.
-create policy "students can log their own hours"
+-- hour_logs: volunteers insert/read their own; admins read/update everything.
+create policy "volunteers can log their own hours"
   on hour_logs for insert
   to authenticated
   with check (
@@ -102,20 +88,19 @@ create policy "students can log their own hours"
     and verified_by is null
   );
 
-create policy "students, drive organizers, and admins can read logs"
+create policy "volunteers and admins can read logs"
   on hour_logs for select
   to authenticated
   using (
     student_id = auth.uid()
-    or owns_drive(drive_id)
     or is_admin()
   );
 
-create policy "drive organizers and admins can verify logs"
+create policy "admins can verify logs"
   on hour_logs for update
   to authenticated
-  using (owns_drive(drive_id) or is_admin())
+  using (is_admin())
   with check (
-    (owns_drive(drive_id) or is_admin())
+    is_admin()
     and (verified_by is null or verified_by = auth.uid())
   );

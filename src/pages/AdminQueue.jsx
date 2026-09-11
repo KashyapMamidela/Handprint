@@ -19,16 +19,23 @@ export default function AdminQueue() {
       .from('hour_logs')
       .select('*, drives(id, name, org), student:profiles!hour_logs_student_id_fkey(name)')
       .eq('status', 'pending');
-    setQueue(data || []);
+    setQueue(
+      (data || []).map((q) => ({
+        ...q,
+        drive_name: q.drives?.name,
+        drive_org: q.drives?.org,
+        student_name: q.student?.name,
+      }))
+    );
   }, []);
 
   useEffect(() => {
     if (!profile) return;
     loadQueue();
-
-    let driveQuery = supabase.from('drives').select('id, name');
-    if (profile.role !== 'admin') driveQuery = driveQuery.eq('organizer_id', profile.id);
-    driveQuery.then(({ data }) => setDriveOptions(data || []));
+    supabase
+      .from('drives')
+      .select('id, name')
+      .then(({ data }) => setDriveOptions(data || []));
   }, [profile, loadQueue]);
 
   useEffect(() => {
@@ -69,7 +76,7 @@ export default function AdminQueue() {
 
   const visibleQueue = useMemo(() => {
     let rows = queue || [];
-    if (driveFilter !== 'all') rows = rows.filter((q) => q.drive_id === driveFilter);
+    if (driveFilter !== 'all') rows = rows.filter((q) => String(q.drive_id) === driveFilter);
     rows = [...rows].sort((a, b) => {
       if (sortBy === 'oldest') return new Date(a.created_at) - new Date(b.created_at);
       if (sortBy === 'hours') return Number(b.hours) - Number(a.hours);
@@ -119,7 +126,7 @@ export default function AdminQueue() {
             className="grid gap-2 border-b border-white/[0.08] bg-white/[0.03] px-6 py-3.5"
             style={{ gridTemplateColumns: '1.4fr 1.6fr 0.7fr 0.9fr 1.4fr' }}
           >
-            <HeadCell>Student</HeadCell>
+            <HeadCell>Volunteer</HeadCell>
             <HeadCell>Drive</HeadCell>
             <HeadCell>Hours</HeadCell>
             <HeadCell>Submitted</HeadCell>
@@ -132,10 +139,10 @@ export default function AdminQueue() {
                 className="grid items-center gap-2 px-6 py-4"
                 style={{ gridTemplateColumns: '1.4fr 1.6fr 0.7fr 0.9fr 1.4fr' }}
               >
-                <div className="text-sm font-bold text-cream">{q.student?.name}</div>
+                <div className="text-sm font-bold text-cream">{q.student_name}</div>
                 <div>
-                  <div className="text-sm text-cream">{q.drives?.name}</div>
-                  <div className="mt-0.5 text-xs text-text-muted">{q.drives?.org}</div>
+                  <div className="text-sm text-cream">{q.drive_name}</div>
+                  <div className="mt-0.5 text-xs text-text-muted">{q.drive_org}</div>
                 </div>
                 <div className="text-sm font-semibold text-cream">{q.hours} hrs</div>
                 <div className="text-[13px] text-text-nav">{formatDate(q.created_at)}</div>

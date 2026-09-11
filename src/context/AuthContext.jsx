@@ -11,15 +11,16 @@ export function AuthProvider({ children }) {
   const fetchProfile = useCallback(async (userId) => {
     if (!userId) {
       setProfile(null);
-      return;
+      return null;
     }
     const { data, error } = await supabase.from('profiles').select('*').eq('id', userId).single();
     if (error) {
       console.error('Failed to load profile', error);
       setProfile(null);
-      return;
+      return null;
     }
     setProfile(data);
+    return data;
   }, []);
 
   useEffect(() => {
@@ -45,6 +46,37 @@ export function AuthProvider({ children }) {
     };
   }, [fetchProfile]);
 
+  // Returns the fresh profile row so callers (e.g. AdminLogin checking
+  // `.role`) can act on it immediately, without waiting on the
+  // onAuthStateChange listener above to catch up.
+  const login = useCallback(
+    async (email, password) => {
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) throw error;
+      setSession(data.session);
+      return fetchProfile(data.session.user.id);
+    },
+    [fetchProfile]
+  );
+
+  // Returns the fresh profile on immediate sign-up (email confirmation off),
+  // or `null` if Supabase requires email confirmation first (no session yet)
+  // -- callers should treat `null` as "check your email", not an error.
+  const signup = useCallback(
+    async (name, email, password) => {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: { data: { name } },
+      });
+      if (error) throw error;
+      if (!data.session) return null;
+      setSession(data.session);
+      return fetchProfile(data.session.user.id);
+    },
+    [fetchProfile]
+  );
+
   const signOut = useCallback(() => supabase.auth.signOut(), []);
 
   const value = {
@@ -52,6 +84,8 @@ export function AuthProvider({ children }) {
     user: session?.user ?? null,
     profile,
     loading,
+    login,
+    signup,
     signOut,
     refreshProfile: () => fetchProfile(session?.user?.id),
   };

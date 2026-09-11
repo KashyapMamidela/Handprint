@@ -1,11 +1,19 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
-const NAV_ITEMS = [
+const LOGGED_OUT_NAV = [
+  { to: '/drives', label: 'Drives' },
+  { to: '/leaderboard', label: 'Leaderboard' },
+];
+const VOLUNTEER_NAV = [
   { to: '/dashboard', label: 'Dashboard' },
   { to: '/drives', label: 'Drives' },
   { to: '/leaderboard', label: 'Leaderboard' },
-  { to: '/admin', label: 'Admin' },
+];
+const ADMIN_NAV = [
+  { to: '/admin', label: 'Queue' },
+  { to: '/admin/drives', label: 'Post Drive' },
+  { to: '/leaderboard', label: 'Leaderboard' },
 ];
 
 export default function Header() {
@@ -17,7 +25,8 @@ export default function Header() {
     navigate('/');
   };
 
-  const isOrganizer = profile?.role === 'organizer' || profile?.role === 'admin';
+  const isAdmin = profile?.role === 'admin';
+  const navItems = !profile ? LOGGED_OUT_NAV : isAdmin ? ADMIN_NAV : VOLUNTEER_NAV;
 
   return (
     <header className="sticky top-0 z-50 flex h-[72px] items-center justify-between border-b border-white/[0.08] bg-ink/85 px-12 backdrop-blur-lg">
@@ -27,10 +36,11 @@ export default function Header() {
       </Link>
 
       <nav className="flex items-center gap-8">
-        {NAV_ITEMS.map((item) => (
+        {navItems.map((item) => (
           <NavLink
             key={item.to}
             to={item.to}
+            end={item.to === '/admin'}
             className={({ isActive }) =>
               `text-[15px] ${isActive ? 'font-bold text-gold-200' : 'font-semibold text-text-nav'}`
             }
@@ -46,7 +56,7 @@ export default function Header() {
           onClick={handleAvatarClick}
           title="Sign out"
           className={`flex h-10 w-10 items-center justify-center rounded-full text-sm font-extrabold ${
-            isOrganizer ? 'bg-green-400 text-ink' : 'bg-gold-400 text-ink-deep'
+            isAdmin ? 'bg-green-400 text-ink' : 'bg-gold-400 text-ink-deep'
           }`}
         >
           {profile.initials}

@@ -29,8 +29,11 @@ export default function Leaderboard() {
   }, []);
 
   const data = rows || [];
-  const podium = data.slice(0, 3);
-  const rest = data.slice(3);
+  // The 3D podium only makes sense once there are 3 students to fill it —
+  // below that, skip it so people still show up in the ranked list instead
+  // of disappearing into a "rest" slice that assumed 3 podium spots.
+  const podium = data.length >= 3 ? data.slice(0, 3) : [];
+  const rest = data.length >= 3 ? data.slice(3) : data;
   const max = data.length ? Number(data[0].hours) || 1 : 1;
   const chartData = data.slice(0, 10).map((r) => ({ name: r.name, hours: Number(r.hours) }));
 
@@ -111,7 +114,7 @@ export default function Leaderboard() {
             style={{ gridTemplateColumns: '0.5fr 2fr 1fr 3fr' }}
           >
             <HeadCell>Rank</HeadCell>
-            <HeadCell>Student</HeadCell>
+            <HeadCell>Volunteer</HeadCell>
             <HeadCell>Hours</HeadCell>
             <HeadCell>Verified hours</HeadCell>
           </div>

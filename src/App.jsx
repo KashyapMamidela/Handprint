@@ -1,5 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
 import ProtectedRoute from './components/ProtectedRoute';
+import AdminDrives from './pages/AdminDrives';
+import AdminLogin from './pages/AdminLogin';
 import AdminQueue from './pages/AdminQueue';
 import Dashboard from './pages/Dashboard';
 import Drives from './pages/Drives';
@@ -12,6 +14,7 @@ export default function App() {
     <Routes>
       <Route path="/" element={<Landing />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/admin/login" element={<AdminLogin />} />
       <Route path="/drives" element={<Drives />} />
       <Route path="/leaderboard" element={<Leaderboard />} />
       <Route
@@ -25,8 +28,16 @@ export default function App() {
       <Route
         path="/admin"
         element={
-          <ProtectedRoute roles={['organizer', 'admin']}>
+          <ProtectedRoute roles={['admin']}>
             <AdminQueue />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/drives"
+        element={
+          <ProtectedRoute roles={['admin']}>
+            <AdminDrives />
           </ProtectedRoute>
         }
       />

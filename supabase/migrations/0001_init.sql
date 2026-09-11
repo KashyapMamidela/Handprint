@@ -2,13 +2,13 @@
 
 create extension if not exists "pgcrypto";
 
-create type user_role as enum ('student', 'organizer', 'admin');
+create type user_role as enum ('volunteer', 'admin');
 create type log_status as enum ('pending', 'approved', 'rejected');
 
 create table profiles (
   id uuid primary key references auth.users (id) on delete cascade,
   name text not null,
-  role user_role not null default 'student',
+  role user_role not null default 'volunteer',
   initials text not null,
   created_at timestamptz not null default now()
 );
@@ -21,7 +21,7 @@ create table drives (
   event_date date,
   hours_estimate numeric,
   spots integer,
-  organizer_id uuid references profiles (id) on delete set null,
+  created_by uuid references profiles (id) on delete set null,
   created_at timestamptz not null default now()
 );
 
@@ -31,7 +31,7 @@ create table hour_logs (
   drive_id uuid not null references drives (id) on delete cascade,
   hours numeric not null check (hours > 0),
   description text,
-  proof_url text,
+  proof_path text,
   status log_status not null default 'pending',
   verified_by uuid references profiles (id),
   verified_at timestamptz,
@@ -42,12 +42,12 @@ create table hour_logs (
 create index hour_logs_student_id_idx on hour_logs (student_id);
 create index hour_logs_drive_id_idx on hour_logs (drive_id);
 create index hour_logs_status_idx on hour_logs (status);
-create index drives_organizer_id_idx on drives (organizer_id);
+create index drives_created_by_idx on drives (created_by);
 
 -- Auto-create a profiles row whenever a new auth.users row appears.
 -- Expects signup metadata: { "name": "Full Name" }. Falls back to the email
--- local-part if no name was supplied. All new users start as 'student';
--- organizer/admin roles are granted later via direct SQL.
+-- local-part if no name was supplied. All new users start as 'volunteer';
+-- admin roles are granted later via direct SQL.
 create function handle_new_user()
 returns trigger
 language plpgsql

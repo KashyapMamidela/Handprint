@@ -1,8 +1,10 @@
 # Handprint
 
-A volunteer hours tracker: students log service hours, organizers/admins verify them, and everyone shows up on a live leaderboard.
+A volunteer hours tracker: volunteers log service hours, admins post drives and verify submissions, and everyone shows up on a live leaderboard.
 
-Stack: React + Vite + Tailwind, Supabase (Postgres + Auth + RLS + Realtime + Storage), Recharts, deployed on Vercel.
+There are two separate logins: `/login` for volunteers (signup included) and `/admin/login` for admins (no signup — see below).
+
+Stack: React + Vite + Tailwind, Supabase (Postgres + Auth + Realtime + Storage), Recharts. Deployed on Vercel.
 
 ## 1. Create a Supabase project
 
@@ -12,18 +14,15 @@ Create a project at [supabase.com](https://supabase.com), then grab the **Projec
 
 The schema lives in `supabase/migrations/`, run in order:
 
-1. `0001_init.sql` — enums, `profiles`/`drives`/`hour_logs` tables, the new-user trigger that creates a `profiles` row (role defaults to `student`) on signup.
+1. `0001_init.sql` — enums, `profiles`/`drives`/`hour_logs` tables, the new-user trigger that creates a `profiles` row (role defaults to `volunteer`) on signup.
 2. `0002_rls.sql` — Row Level Security policies for all three tables.
-3. `0003_leaderboard_view.sql` — the `leaderboard` view (sum of approved hours per student, recomputed on read).
+3. `0003_leaderboard_view.sql` — the `leaderboard` view (sum of approved hours per volunteer, recomputed on read).
 4. `0004_storage.sql` — the private `proof` Storage bucket for optional hour-log attachments.
+5. `0005_stats.sql` — `get_stats()`, an RPC the Landing page calls for its hero numbers.
 
 Run them with the [Supabase CLI](https://supabase.com/docs/guides/cli) (`supabase db push`, after `supabase link`) or paste each file's contents into the SQL Editor in the Supabase dashboard, in order.
 
-**Promoting a user to organizer or admin** is manual for now — there's no UI for it. In the SQL Editor:
-
-```sql
-update profiles set role = 'organizer' where id = '<user-uuid>';
-```
+**Email confirmation**: Supabase projects default to requiring email confirmation on signup. For a smoother demo, turn it off under Authentication → Providers → Email → "Confirm email". Login.jsx handles either setting (shows a "check your email" message if it's left on).
 
 ## 3. Configure environment variables
 
@@ -40,12 +39,25 @@ npm install
 npm run dev
 ```
 
-## 5. Deploy to Vercel
+## 5. Promoting a user to admin
 
-Connect the GitHub repo in Vercel, then set the same two environment variables (`VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`) in the Vercel project's Settings → Environment Variables. Every push to the connected branch redeploys automatically — no other build configuration is needed (Vercel auto-detects Vite).
+There's no signup flow for admins — every signup at `/login` creates a `volunteer` account. To make one an admin, in the Supabase SQL Editor:
+
+```sql
+update profiles set role = 'admin' where id = '<user-uuid>';
+```
+
+(Find the uuid under Authentication → Users, or `select id, email from auth.users;`.) That account can then sign in at `/admin/login` to post drives (`/admin/drives`) and verify submissions (`/admin`).
+
+## 6. Deploy to Vercel
+
+Connect the GitHub repo in Vercel (Vercel auto-detects Vite — no `vercel.json` needed), then set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` in the project's Settings → Environment Variables. Every push to the connected branch redeploys automatically.
 
 ## Notes on scope
 
-- **Auth** is email/password only for now. The Login screen renders "Continue with Google Workspace" / "campus SSO" buttons to match the design, but they're disabled — wiring up real Google OAuth is a config change in Supabase Auth providers plus enabling the buttons in `src/pages/Login.jsx`.
-- **Roles**: every signup is `student`; `organizer`/`admin` are granted by editing the `profiles` table directly (see step 2).
-- **No Edge Functions**: leaderboard aggregation is a Postgres view, and hour-log verification is a direct RLS-gated update from the client with Realtime broadcasting the change — both examples the brief called out for possible Edge Function use turned out not to need one.
+- **Roles** are just `volunteer` and `admin` — a single shared admin team that can post/edit any drive and verify any submission (no per-admin ownership of drives).
+- **Auth** is email/password via Supabase Auth. The OAuth-style buttons that were in early mockups have been removed entirely.
+- **Realtime** is Supabase Realtime: Dashboard subscribes to its own `hour_logs` rows, AdminQueue and Leaderboard subscribe to all `hour_logs` changes, refetching on any insert/update.
+- **Proof uploads** go to the private `proof` Storage bucket at `{volunteer-id}/...`; RLS on `storage.objects` limits reads to the uploader or an admin.
+- **Leaderboard** is computed on read from approved `hour_logs` via the `leaderboard` view — no denormalized column.
+- **`server/`** (a Node/Express + MySQL + Socket.IO API) is left in the repo from an earlier local-only XAMPP demo. The live app no longer uses it — everything above talks to Supabase directly from the client.

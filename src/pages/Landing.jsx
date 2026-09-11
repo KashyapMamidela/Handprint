@@ -20,25 +20,17 @@ export default function Landing() {
     let cancelled = false;
 
     async function load() {
-      const [{ data: leaderboard }, { data: drives, count: driveCount }] = await Promise.all([
+      const [{ data: leaderboard }, { data: drives }, { data: statsRows }] = await Promise.all([
         supabase.from('leaderboard').select('*').order('rank', { ascending: true }),
-        supabase
-          .from('drives')
-          .select('*', { count: 'exact' })
-          .order('event_date', { ascending: true })
-          .limit(3),
+        supabase.from('drives').select('*').order('event_date', { ascending: true }).limit(3),
+        supabase.rpc('get_stats'),
       ]);
 
       if (cancelled) return;
 
-      const leaderRows = leaderboard || [];
-      setLeaders(leaderRows.slice(0, 3));
+      setLeaders((leaderboard || []).slice(0, 3));
       setDrivesPreview(drives || []);
-      setStats({
-        hours: leaderRows.reduce((sum, l) => sum + Number(l.hours || 0), 0),
-        students: leaderRows.filter((l) => Number(l.hours || 0) > 0).length,
-        drives: driveCount ?? 0,
-      });
+      setStats(statsRows?.[0] || { hours: 0, students: 0, drives: 0 });
     }
 
     load();
@@ -84,7 +76,7 @@ export default function Landing() {
           </div>
           <div className="flex gap-10">
             <Stat value={stats.hours.toLocaleString()} label="verified hours this term" />
-            <Stat value={stats.students.toLocaleString()} label="students participating" />
+            <Stat value={stats.students.toLocaleString()} label="volunteers participating" />
             <Stat value={stats.drives.toLocaleString()} label="active drives" />
           </div>
         </div>
